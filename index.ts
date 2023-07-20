@@ -52,12 +52,8 @@ class Control implements InternalControl {
 }
 
 class Elevator {
-  private control: InternalControl;
+  private control = new Control();
   private queue: ElevatorRequest[] = [];
-
-  constructor() {
-    this.control = new Control();
-  }
 
   needToGoDown(request: ElevatorRequest): boolean {
     return this.control.getCurrentFloor() > request.currentFloor;
@@ -88,6 +84,9 @@ class Elevator {
       console.log('No more reqeusts');
       return;
     }
+
+    // highest floor has the priority
+    this.queue.sort((a, b) => b.currentFloor - a.currentFloor);
 
     const currentRequest = this.queue[0];
 
